@@ -80,7 +80,7 @@ export function PromptInput() {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-8 items-center">
         <TextArea
           bg="#fefcd0"
           textColor="black"
@@ -89,13 +89,40 @@ export function PromptInput() {
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
-        <Button
-          onClick={handleSubmit}
-          disabled={isLoading}
-          className="self-start"
-        >
-          {isLoading ? "Generating..." : "Generate Challenge"}
-        </Button>
+        {isLoading ? (
+          <div>
+            <Button
+              onClick={handleSubmit}
+              disabled={true}
+              className="self-center flex flex-col items-center animate-bounce"
+            >
+              <Image
+                src={`/doctor${Math.floor(Date.now() / 200) % 2 === 0 ? "Thinking1" : "Thinking2"}.svg`}
+                alt="Generating"
+                width={80}
+                height={80}
+                className="animate-pulse"
+              />
+              Generating...
+            </Button>
+          </div>
+        ) : (
+          <div>
+            <Button
+              onClick={handleSubmit}
+              disabled={false}
+              className="self-center flex flex-col items-center"
+            >
+              <Image
+                src="/doctorSleeping.svg"
+                alt="Generate"
+                width={80}
+                height={80}
+              />
+              Generate Challenge
+            </Button>
+          </div>
+        )}
       </div>
 
       {aiResponse && (
