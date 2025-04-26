@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { toast } from "sonner";
+import { ImageUploader } from "./ImageUploader";
 import type { Id } from "../../../convex/_generated/dataModel";
 import {
   Card,
@@ -99,6 +100,7 @@ type Task = {
   status: "pending" | "completed";
   completedBy?: string;
   completedAt?: number;
+  imageId?: Id<"images">;
 };
 
 type Challenge = {
@@ -113,10 +115,10 @@ function Challenge({ challenge }: { challenge: Challenge }) {
     challengeId: challenge._id,
   });
   const createTask = useMutation(api.challenges.createTask);
-  const completeTask = useMutation(api.challenges.completeTask);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
+  const [showUploader, setShowUploader] = useState<Id<"tasks"> | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,13 +137,8 @@ function Challenge({ challenge }: { challenge: Challenge }) {
     }
   };
 
-  const handleComplete = async (taskId: Id<"tasks">) => {
-    try {
-      await completeTask({ taskId });
-      toast.success("Task completed!");
-    } catch {
-      toast.error("Failed to complete task");
-    }
+  const handleStartComplete = (taskId: Id<"tasks">) => {
+    setShowUploader(taskId);
   };
 
   if (!tasks) return null;
@@ -151,10 +148,6 @@ function Challenge({ challenge }: { challenge: Challenge }) {
       <div className="absolute -top-28 z-10">
         <Image src="/clip.svg" alt="Clip" width={300} height={300} />
       </div>
-
-      {/* <div className="flex justify-center">
-        <Image src="/healthSign.svg" alt="Health Sign" width={10} height={10} />
-      </div> */}
 
       <Card borderColor="#697786">
         <div className="relative z-1 p-4 space-y-4">
@@ -227,28 +220,39 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                       <p className="text-sm text-slate-600 mb-2">
                         {task.description}
                       </p>
-                      <div className="flex justify-between items-center">
-                        <div>
-                          {task.status === "completed" && (
-                            <div className="text-xs text-slate-500">
-                              <div>Completed by {task.completedBy}</div>
-                              <div className="text-slate-400">
-                                {task.completedAt &&
-                                  new Date(
-                                    task.completedAt,
-                                  ).toLocaleDateString()}
+                      <div className="flex flex-col gap-4">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            {task.status === "completed" && (
+                              <div className="text-xs text-slate-500">
+                                <div>Completed by {task.completedBy}</div>
+                                <div className="text-slate-400">
+                                  {task.completedAt &&
+                                    new Date(
+                                      task.completedAt,
+                                    ).toLocaleDateString()}
+                                </div>
                               </div>
-                            </div>
+                            )}
+                          </div>
+                          {task.status === "pending" && !showUploader && (
+                            <button
+                              type="button"
+                              onClick={() => handleStartComplete(task._id)}
+                              className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200"
+                            >
+                              Upload Completion Image
+                            </button>
                           )}
                         </div>
-                        {task.status === "pending" && (
-                          <button
-                            type="button"
-                            onClick={() => handleComplete(task._id)}
-                            className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200"
-                          >
-                            Complete
-                          </button>
+
+                        {showUploader === task._id &&
+                          task.status === "pending" && (
+                            <ImageUploader taskId={task._id} />
+                          )}
+
+                        {task.status === "completed" && task.imageId && (
+                          <CompletionImage imageId={task.imageId} />
                         )}
                       </div>
                     </div>
@@ -259,6 +263,28 @@ function Challenge({ challenge }: { challenge: Challenge }) {
           </div>
         </div>
       </Card>
+    </div>
+  );
+}
+
+function CompletionImage({ imageId }: { imageId: Id<"images"> }) {
+  const image = useQuery(api.images.getById, { id: imageId });
+
+  if (!image || !image.url) return null;
+
+  return (
+    <div className="mt-4">
+      <Label>Completion Image</Label>
+      <div className="relative w-full h-[200px] mt-2">
+        <Image
+          src={image.url}
+          alt="Task completion"
+          fill
+          style={{ objectFit: 'contain' }}
+          className="rounded-lg"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+      </div>
     </div>
   );
 }

@@ -55,10 +55,17 @@ export const getTasks = query({
             .withIndex("by_user", (q) => q.eq("userId", completion.userId))
             .unique();
 
+          // Get the image if it exists
+          const image = await ctx.db
+            .query("images")
+            .filter((q) => q.eq(q.field("taskId"), task._id))
+            .first();
+
           return {
             ...task,
             completedBy: profile?.nickname || "Unknown User",
             completedAt: completion.completedAt,
+            imageId: image?._id,
           };
         }
         return task;
