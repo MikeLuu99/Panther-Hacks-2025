@@ -2,16 +2,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { Button, Card } from "pixel-retroui";
 import type { Id } from "../../../convex/_generated/dataModel";
+import { Camera } from "react-camera-pro";
 
 export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isImageSaved, setIsImageSaved] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
+  const camera = useRef<any>(null);
+
   const generateUploadUrl = useMutation(api.images.generateUploadUrl);
   const saveImage = useMutation(api.images.saveImage);
   const completeTask = useMutation(api.challenges.completeTask);
@@ -23,6 +27,29 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
       const previewUrl = URL.createObjectURL(selectedFile);
       setPreview(previewUrl);
       setIsImageSaved(false);
+    }
+  };
+
+  const handleCameraCapture = () => {
+    try {
+      const photoData = camera.current?.takePhoto();
+      if (photoData) {
+        // Convert base64 to blob
+        fetch(photoData)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const imageFile = new File([blob], "camera-capture.jpg", {
+              type: "image/jpeg",
+            });
+            setFile(imageFile);
+            setPreview(photoData);
+            setShowCamera(false);
+            setIsImageSaved(false);
+          });
+      }
+    } catch (error) {
+      console.error("Failed to capture photo:", error);
+      toast.error("Failed to capture photo");
     }
   };
 
@@ -83,18 +110,51 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
 
   return (
     <div className="grid w-full max-w-sm items-center gap-4">
-      <div>
-        <Card>
-          <Label htmlFor="picture">Upload completion picture</Label>
-          <Input
-            id="picture"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            disabled={isUploading}
-          />
-        </Card>
-      </div>
+      {!showCamera ? (
+        <>
+          <div>
+            <Card>
+              <Label htmlFor="picture">Upload completion picture</Label>
+              <Input
+                id="picture"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={isUploading}
+              />
+            </Card>
+          </div>
+
+          <div className="flex justify-center">
+            <Button
+              onClick={() => setShowCamera(true)}
+              className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
+            >
+              Use Camera Instead
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div className="space-y-4">
+          <div className="relative h-[300px] w-full">
+            <Camera ref={camera} aspectRatio={16 / 9} />
+          </div>
+          <div className="flex justify-center gap-2">
+            <Button
+              onClick={handleCameraCapture}
+              className="bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600"
+            >
+              Take Photo
+            </Button>
+            <Button
+              onClick={() => setShowCamera(false)}
+              className="bg-gray-500 text-white rounded px-4 py-2 hover:bg-gray-600"
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
 
       {preview && (
         <div className="mt-4 flex justify-center">
