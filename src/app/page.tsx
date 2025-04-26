@@ -48,7 +48,7 @@ export default function Home() {
       </header>
       <main className="flex-1 p-8 bg-white">
         <div className="max-w-4xl mx-auto">
-           <Content />
+          <Content />
         </div>
       </main>
       <Toaster />
@@ -93,9 +93,7 @@ function Content() {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center">
-        <h1 className="text-5xl font-bold accent-text mb-4">
-          Collaborative Challenges
-        </h1>
+        <h1 className="text-5xl font-bold accent-text mb-4">Doctor Sandie</h1>
         <Authenticated>
           {profile ? (
             <p className="text-xl text-slate-600">

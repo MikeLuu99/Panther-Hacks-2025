@@ -4,6 +4,7 @@ import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Button, Card } from "pixel-retroui";
 import type { Id } from "../../../convex/_generated/dataModel";
 
 export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
@@ -67,7 +68,7 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
     try {
       await completeTask({ taskId });
       toast.success("Task completed successfully!");
-      
+
       if (preview) {
         URL.revokeObjectURL(preview);
       }
@@ -83,18 +84,20 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
   return (
     <div className="grid w-full max-w-sm items-center gap-4">
       <div>
-        <Label htmlFor="picture">Upload completion picture</Label>
-        <Input
-          id="picture"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          disabled={isUploading}
-        />
+        <Card>
+          <Label htmlFor="picture">Upload completion picture</Label>
+          <Input
+            id="picture"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={isUploading}
+          />
+        </Card>
       </div>
 
       {preview && (
-        <div className="mt-4">
+        <div className="mt-4 flex justify-center">
           <img
             src={preview}
             alt="Preview"
@@ -106,22 +109,22 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
 
       <div className="flex flex-col gap-2">
         {file && !isImageSaved && (
-          <button
+          <Button
             onClick={handleUpload}
             disabled={isUploading}
             className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 disabled:opacity-50"
           >
             {isUploading ? "Uploading..." : "Upload Image"}
-          </button>
+          </Button>
         )}
 
         {isImageSaved && file && (
-          <button
+          <Button
             onClick={handleComplete}
             className="bg-green-500 text-white rounded px-4 py-2 hover:bg-green-600"
           >
             Complete Task
-          </button>
+          </Button>
         )}
       </div>
     </div>

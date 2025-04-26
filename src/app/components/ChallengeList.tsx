@@ -11,8 +11,10 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
+  Button,
 } from "pixel-retroui";
 import Image from "next/image";
+import { Label } from "@/components/ui/label";
 
 export function ChallengesList() {
   const challenges = useQuery(api.challenges.list);
@@ -54,33 +56,39 @@ export function ChallengesList() {
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 p-4 border rounded bg-white"
+          className="space-y-4 p-4 rounded bg-white"
         >
-          <div>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Challenge title"
-              className="w-full border rounded p-2"
-              required
-            />
-          </div>
-          <div>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Challenge description"
-              className="w-full border rounded p-2"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-indigo-500 text-white rounded px-4 py-2 hover:bg-indigo-600"
-          >
-            Create Challenge
-          </button>
+          <Card>
+            <div>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Challenge title"
+                className="w-full rounded p-2"
+                required
+              />
+            </div>
+          </Card>
+          <Card>
+            <div>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Challenge description"
+                className="w-full  rounded p-2"
+                required
+              />
+            </div>
+          </Card>
+          <Card className="flex justify-center">
+            <Button
+              type="submit"
+              className="bg-indigo-500 text-white rounded px-4 py-2 hover:bg-indigo-600"
+            >
+              Create Challenge
+            </Button>
+          </Card>
         </form>
       )}
 
@@ -178,87 +186,109 @@ function Challenge({ challenge }: { challenge: Challenge }) {
 
             {showTaskForm && (
               <form onSubmit={handleSubmit} className="space-y-4 mb-4">
-                <input
-                  type="text"
-                  value={taskTitle}
-                  onChange={(e) => setTaskTitle(e.target.value)}
-                  placeholder="Task title"
-                  className="w-full border rounded p-2"
-                  required
-                />
-                <textarea
-                  value={taskDescription}
-                  onChange={(e) => setTaskDescription(e.target.value)}
-                  placeholder="Task description"
-                  className="w-full border rounded p-2"
-                  required
-                />
                 <Card>
-                  <button
+                  <input
+                    type="text"
+                    value={taskTitle}
+                    onChange={(e) => setTaskTitle(e.target.value)}
+                    placeholder="Task title"
+                    className="w-full  rounded p-2"
+                    required
+                  />
+                </Card>
+                <Card>
+                  <textarea
+                    value={taskDescription}
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                    placeholder="Task description"
+                    className="w-full  rounded p-2"
+                    required
+                  />
+                </Card>
+                <Card className="flex justify-center">
+                  <Button
                     type="submit"
                     className="bg-indigo-500 text-white rounded px-4 py-2 hover:bg-indigo-600"
                   >
                     Create Task
-                  </button>
+                  </Button>
                 </Card>
               </form>
             )}
 
             <Accordion collapsible={false}>
-              {tasks.map((task: Task) => (
-                <AccordionItem key={task._id} value={task._id}>
-                  <AccordionTrigger>
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-medium">{task.title}</span>
-                      {task.status === "completed" && (
-                        <span className="text-sm text-green-600">✓ Done</span>
-                      )}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="p-2">
-                      <p className="text-sm text-slate-600 mb-2">
-                        {task.description}
-                      </p>
-                      <div className="flex flex-col gap-4">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            {task.status === "completed" && (
-                              <div className="text-xs text-slate-500">
-                                <div>Completed by {task.completedBy}</div>
-                                <div className="text-slate-400">
-                                  {task.completedAt &&
-                                    new Date(
-                                      task.completedAt,
-                                    ).toLocaleDateString()}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                          {task.status === "pending" && !showUploader && (
-                            <button
-                              type="button"
-                              onClick={() => handleStartComplete(task._id)}
-                              className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200"
-                            >
-                              Upload Completion Image
-                            </button>
-                          )}
-                        </div>
+              {tasks.map((task) => {
+                const typedTask: Task = {
+                  _id: task._id,
+                  title: task.title,
+                  description: task.description || "",
+                  status: task.status,
+                  completedBy: task.completedBy,
+                  completedAt: task.completedAt,
+                  imageId: task.imageId,
+                };
 
-                        {showUploader === task._id &&
-                          task.status === "pending" && (
-                            <ImageUploader taskId={task._id} />
-                          )}
-
-                        {task.status === "completed" && task.imageId && (
-                          <CompletionImage imageId={task.imageId} />
+                return (
+                  <AccordionItem key={typedTask._id} value={typedTask._id}>
+                    <AccordionTrigger>
+                      <div className="flex items-center justify-between w-full">
+                        <span className="font-medium">{typedTask.title}</span>
+                        {typedTask.status === "completed" && (
+                          <span className="text-sm text-green-600">✓ Done</span>
                         )}
                       </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="p-2">
+                        <p className="text-sm text-slate-600 mb-2">
+                          {typedTask.description}
+                        </p>
+                        <div className="flex flex-col gap-4 items-center">
+                          <div className="flex justify-between items-center w-full">
+                            <div>
+                              {typedTask.status === "completed" && (
+                                <div className="text-xs text-slate-500">
+                                  <div>
+                                    Completed by {typedTask.completedBy}
+                                  </div>
+                                  <div className="text-slate-400">
+                                    {typedTask.completedAt &&
+                                      new Date(
+                                        typedTask.completedAt,
+                                      ).toLocaleDateString()}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            {typedTask.status === "pending" &&
+                              !showUploader && (
+                                <Button
+                                  onClick={() =>
+                                    handleStartComplete(typedTask._id)
+                                  }
+                                  className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-500 hover:text-white"
+                                  shadow="#991635"
+                                >
+                                  Complete?
+                                </Button>
+                              )}
+                          </div>
+
+                          {showUploader === typedTask._id &&
+                            typedTask.status === "pending" && (
+                              <ImageUploader taskId={typedTask._id} />
+                            )}
+
+                          {typedTask.status === "completed" &&
+                            typedTask.imageId && (
+                              <CompletionImage imageId={typedTask.imageId} />
+                            )}
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
             </Accordion>
           </div>
         </div>
@@ -280,7 +310,7 @@ function CompletionImage({ imageId }: { imageId: Id<"images"> }) {
           src={image.url}
           alt="Task completion"
           fill
-          style={{ objectFit: 'contain' }}
+          style={{ objectFit: "contain" }}
           className="rounded-lg"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
