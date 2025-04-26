@@ -14,7 +14,7 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
   const [isUploading, setIsUploading] = useState(false);
   const [isImageSaved, setIsImageSaved] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-  const camera = useRef<any>(null);
+  const camera = useRef<{ takePhoto: () => string }>(null);
 
   const generateUploadUrl = useMutation(api.images.generateUploadUrl);
   const saveImage = useMutation(api.images.saveImage);
@@ -137,7 +137,7 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
       ) : (
         <div className="space-y-4">
           <div className="relative h-[300px] w-full">
-            <Camera ref={camera} aspectRatio={16 / 9} />
+            <Camera ref={camera} aspectRatio={16 / 9} errorMessages={{}} />
           </div>
           <div className="flex justify-center gap-2">
             <Button
@@ -155,7 +155,6 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
           </div>
         </div>
       )}
-
       {preview && (
         <div className="mt-4 flex justify-center">
           <img
@@ -165,8 +164,8 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
             style={{ maxHeight: "200px" }}
           />
         </div>
-      )}
-
+      )}{" "}
+      height={200}
       <div className="flex flex-col gap-2">
         {file && !isImageSaved && (
           <Button

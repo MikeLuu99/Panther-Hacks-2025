@@ -305,14 +305,14 @@ function CompletionImage({ imageId }: { imageId: Id<"images"> }) {
   return (
     <div className="mt-4">
       <Label>Completion Image</Label>
-      <div className="relative w-full h-[200px] mt-2">
+      <div className="relative w-full h-[400px] mt-2">
         <Image
           src={image.url}
           alt="Task completion"
-          fill
           style={{ objectFit: "contain" }}
           className="rounded-lg"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          width={500}
+          height={300}
         />
       </div>
     </div>
