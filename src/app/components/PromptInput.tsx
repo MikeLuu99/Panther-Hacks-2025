@@ -1,4 +1,5 @@
-import { TextArea, Button, Card } from "pixel-retroui";
+import { TextArea, Button, Bubble } from "pixel-retroui";
+import Image from "next/image";
 import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
@@ -98,26 +99,37 @@ export function PromptInput() {
       </div>
 
       {aiResponse && (
-        <Card>
-        <div className="mt-4 p-4 rounded-lg bg-white">
-          <h3 className="text-xl font-bold mb-2">{aiResponse.title}</h3>
-          <p className="mb-4 text-gray-600">{aiResponse.description}</p>
+        <div>
+          <Bubble direction="right">
+            <div className="mt-4 p-4 rounded-lg bg-white">
+              <h3 className="text-xl font-bold mb-2">{aiResponse.title}</h3>
+              <p className="mb-4 text-gray-600">{aiResponse.description}</p>
 
-          <h4 className="font-semibold mb-2">Tasks:</h4>
-          <ul className="list-disc pl-5 mb-4">
-            {aiResponse.tasks.map((task) => (
-              <li key={`${task.task}-${task.description}`} className="mb-2">
-                <p className="font-medium">{task.task}</p>
-                <p className="text-sm text-gray-600">{task.description}</p>
-              </li>
-            ))}
-          </ul>
+              <h4 className="font-semibold mb-2">Tasks:</h4>
+              <ul className="list-disc pl-5 mb-4">
+                {aiResponse.tasks.map((task) => (
+                  <li key={`${task.task}-${task.description}`} className="mb-2">
+                    <p className="font-medium">{task.task}</p>
+                    <p className="text-sm text-gray-600">{task.description}</p>
+                  </li>
+                ))}
+              </ul>
 
-          <Button onClick={handleCreateChallenge} disabled={isCreating}>
-            {isCreating ? "Creating..." : "Take on this challenge"}
-          </Button>
+              <Button onClick={handleCreateChallenge} disabled={isCreating}>
+                {isCreating ? "Creating..." : "Take on this challenge"}
+              </Button>
+            </div>
+          </Bubble>
+          <div className="flex justify-end">
+            <Image
+              src="/doctorTalk.svg"
+              alt="Doctor Talking"
+              width={200}
+              height={200}
+              className="-mr-20"
+            />
+          </div>
         </div>
-        </Card>
       )}
     </div>
   );

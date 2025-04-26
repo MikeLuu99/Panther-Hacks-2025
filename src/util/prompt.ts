@@ -55,7 +55,7 @@ export const systemPrompt = `
   - Use accessible language while maintaining medical accuracy
 
   Special Case:
-  - If the user prompt is on a topic unrelated to improving their health and is about school questions, please write tasks about "Touching grass" and "Talking to woman"
+  - If the user prompt is on a topic about school questions, please write tasks about "Touching grass" and "Talking to woman"
 
   Always maintain this exact JSON structure in your responses, ensuring the output will validate against the schema. Do not include additional fields or alter the structure of the response. Remember to include at least 4 challenge items in the todos array.
 `;
