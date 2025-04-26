@@ -267,7 +267,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                                     handleStartComplete(typedTask._id)
                                   }
                                   className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-500 hover:text-white"
-                                  shadow="#991635"
+                                  shadow="green"
                                 >
                                   Complete?
                                 </Button>

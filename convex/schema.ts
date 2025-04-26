@@ -22,6 +22,8 @@ const applicationTables = {
     description: v.optional(v.string()),
     status: v.union(v.literal("pending"), v.literal("completed")),
     imageId: v.optional(v.id("images")),
+    completedBy: v.optional(v.id("users")),
+    completedAt: v.optional(v.number()),
   }).index("by_challenge", ["challengeId"]),
 
   images: defineTable({
