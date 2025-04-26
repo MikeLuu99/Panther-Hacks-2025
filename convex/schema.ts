@@ -14,6 +14,8 @@ const applicationTables = {
     description: v.string(),
     createdBy: v.id("users"),
     status: v.union(v.literal("active"), v.literal("completed")),
+  }).searchIndex("search_body", {
+    searchField: "title",
   }),
 
   tasks: defineTable({

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { toast } from "sonner";
@@ -12,12 +12,36 @@ import {
   AccordionTrigger,
   AccordionContent,
   Button,
+  Input,
 } from "pixel-retroui";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 
+// Debounce helper function
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export function ChallengesList() {
-  const challenges = useQuery(api.challenges.list);
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearchQuery = useDebounce(searchInput, 300); // 300ms delay
+
+  const challenges = useQuery(
+    debouncedSearchQuery ? api.challenges.search : api.challenges.list,
+    debouncedSearchQuery ? { query: debouncedSearchQuery } : {},
+  );
   const createChallenge = useMutation(api.challenges.create);
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState("");
@@ -40,17 +64,36 @@ export function ChallengesList() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Challenges</h2>
-        <Card>
-          <button
-            type="button"
-            onClick={() => setShowForm(!showForm)}
-            className="bg-indigo-500 text-white rounded px-4 py-2 hover:bg-indigo-600"
-          >
-            {showForm ? "Cancel" : "New Challenge"}
-          </button>
-        </Card>
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Challenges</h2>
+          <Card>
+            <button
+              type="button"
+              onClick={() => setShowForm(!showForm)}
+              className="bg-indigo-500 text-white rounded px-4 py-2 hover:bg-indigo-600"
+            >
+              {showForm ? "Cancel" : "New Challenge"}
+            </button>
+          </Card>
+        </div>
+        <div className="flex items-center mb-12">
+          <Image
+            src="/magnifyingGlass.svg"
+            alt="Magnifying Glass"
+            width={60}
+            height={60}
+          />
+          <Input
+            placeholder="Search challenges..."
+            className="w-full"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            bg="#fefcd0"
+            textColor="black"
+            borderColor="black"
+          />
+        </div>
       </div>
 
       {showForm && (
