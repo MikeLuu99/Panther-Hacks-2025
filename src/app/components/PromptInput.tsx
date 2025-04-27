@@ -90,7 +90,7 @@ export function PromptInput() {
           onChange={(e) => setPrompt(e.target.value)}
         />
         {isLoading ? (
-          <div className="w-4/5">
+          <div className="w-1/3">
             <Button
               onClick={handleSubmit}
               disabled={true}
@@ -107,7 +107,7 @@ export function PromptInput() {
             </Button>
           </div>
         ) : (
-          <div className="w-4/5">
+          <div className="w-1/3">
             <Button
               onClick={handleSubmit}
               disabled={false}
