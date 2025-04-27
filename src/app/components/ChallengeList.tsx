@@ -37,10 +37,17 @@ export function ChallengesList() {
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearchQuery = useDebounce(searchInput, 300);
 
-  const challenges = useQuery(
-    debouncedSearchQuery ? api.challenges.search : api.challenges.list,
-    debouncedSearchQuery ? { query: debouncedSearchQuery } : {},
+  // Fix: Separate the query calls instead of using conditional arguments
+  const searchResults = useQuery(
+    api.challenges.search,
+    debouncedSearchQuery ? { query: debouncedSearchQuery } : "skip",
   );
+
+  const allChallenges = useQuery(api.challenges.list);
+
+  // Use the appropriate result based on whether we're searching or not
+  const challenges = debouncedSearchQuery ? searchResults : allChallenges;
+
   const createChallenge = useMutation(api.challenges.create);
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState("");
