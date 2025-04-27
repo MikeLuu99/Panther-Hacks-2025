@@ -9,6 +9,7 @@ import { PromptInput } from "@/app/components/PromptInput";
 import Image from "next/image";
 import Link from "next/link";
 import { useScrollDirection } from "./hooks/useScrollDirection";
+import { Card } from "pixel-retroui";
 
 export default function Home() {
   const isVisible = useScrollDirection();
@@ -39,10 +40,10 @@ export default function Home() {
           >
             <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300 flex items-center gap-2">
               <Image
-                src="/apple.svg"
+                src="/store.svg"
                 alt="Store"
-                width={30}
-                height={30}
+                width={50}
+                height={50}
                 priority
               />
               <span>Store</span>
@@ -52,7 +53,7 @@ export default function Home() {
             href="/leaderboard"
             className="text-indigo-600 hover:text-indigo-700 font-medium"
           >
-            <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
+            <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300 flex items-center gap-2">
               <Image
                 src="/leaderboard.svg"
                 alt="Leaderboard"
@@ -60,6 +61,7 @@ export default function Home() {
                 height={50}
                 priority
               />
+              <span>Leaderboard</span>
             </div>
           </Link>
         </div>
@@ -80,20 +82,22 @@ function UserScore() {
   if (!profile) return null;
 
   return (
-    <div className="text-xl font-medium flex items-center gap-2">
-      Score:{" "}
-      <span className="text-indigo-600 flex items-center gap-1">
-        {profile.score || 0}{" "}
-        <Image
-          src="/apple.svg"
-          alt="apple score"
-          width={20}
-          height={20}
-          className="inline-block"
-          priority
-        />
-      </span>
-    </div>
+    <Card>
+      <div className="text-xl font-medium flex items-center gap-2 p-2">
+        Score:{" "}
+        <span className="text-indigo-600 flex items-center gap-1">
+          {profile.score || 0}{" "}
+          <Image
+            src="/apple.svg"
+            alt="apple score"
+            width={20}
+            height={20}
+            className="inline-block"
+            priority
+          />
+        </span>
+      </div>
+    </Card>
   );
 }
 
@@ -110,21 +114,23 @@ function Content() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="text-center">
-        <h1 className="text-5xl font-bold accent-text mb-4">Doctor Sandie</h1>
-        <Authenticated>
-          {profile ? (
-            <p className="text-xl text-slate-600">
-              Welcome, {profile.nickname}!
-            </p>
-          ) : (
-            <NicknameForm />
-          )}
-        </Authenticated>
-        <Unauthenticated>
-          <p className="text-xl text-slate-600">Sign in to get started</p>
-        </Unauthenticated>
-      </div>
+      <Card>
+        <div className="text-center p-4">
+          <h1 className="text-5xl font-bold accent-text mb-4">Doctor Sandie</h1>
+          <Authenticated>
+            {profile ? (
+              <p className="text-xl text-slate-600">
+                Welcome, {profile.nickname}!
+              </p>
+            ) : (
+              <NicknameForm />
+            )}
+          </Authenticated>
+          <Unauthenticated>
+            <p className="text-xl text-slate-600">Sign in to get started</p>
+          </Unauthenticated>
+        </div>
+      </Card>
 
       <Unauthenticated>
         <SignInForm />

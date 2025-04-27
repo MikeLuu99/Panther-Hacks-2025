@@ -85,7 +85,9 @@ export function ChallengesList() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Challenges</h2>
+          <Card>
+            <h2 className="text-2xl font-bold p-4">Challenges</h2>
+          </Card>
           <Card>
             <button
               type="button"
@@ -168,7 +170,9 @@ export function ChallengesList() {
 
       <div className="grid">
         <div className="w-[800px] mx-auto">
-          <h3 className="text-xl font-semibold mb-4">Active Challenges</h3>
+          <Card>
+            <h3 className="text-xl font-semibold mb-4 p-4">Active Challenges</h3>
+          </Card>
           {activeChallenges.map((challenge) => (
             <Challenge key={challenge._id} challenge={challenge} />
           ))}
@@ -179,7 +183,9 @@ export function ChallengesList() {
 
         <div className="w-[800px] mx-auto">
           <div className="flex items-center gap-4 mb-4">
-            <h3 className="text-xl font-semibold">Completed Challenges</h3>
+            <Card>
+              <h3 className="text-xl font-semibold p-4">Completed Challenges</h3>
+            </Card>
             <Button
               onClick={() => setShowCompleted(!showCompleted)}
               className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300"
