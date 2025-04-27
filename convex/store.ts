@@ -92,6 +92,41 @@ export const initializeStore = mutation({
         imageUrl: "/lebronBG.png",
         type: "background",
       },
+      {
+        name: "Cherry Blossom Background",
+        description: "Beautiful spring vibes!",
+        price: 5,
+        imageUrl: "/cherryBlossomBG.png",
+        type: "background",
+      },
+      {
+        name: "Eiffel Tower Background",
+        description: "Parisian elegance",
+        price: 5,
+        imageUrl: "/eiffelBG.png",
+        type: "background",
+      },
+      {
+        name: "Panther Background",
+        description: "Fierce and proud!",
+        price: 5,
+        imageUrl: "/pantherBG.png",
+        type: "background",
+      },
+      {
+        name: "Sandhu Background",
+        description: "Academic excellence",
+        price: 5,
+        imageUrl: "/sandhuBG.png",
+        type: "background",
+      },
+      {
+        name: "Waterfall Background",
+        description: "Serene nature views",
+        price: 5,
+        imageUrl: "/waterfallBG.png",
+        type: "background",
+      }
     ];
 
     // Check for existing items by imageUrl
