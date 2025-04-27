@@ -9,14 +9,12 @@ import { PromptInput } from "@/app/components/PromptInput";
 import Image from "next/image";
 import Link from "next/link";
 import { useScrollDirection } from "./hooks/useScrollDirection";
-// import { Store } from "@/app/components/Store";
 
 export default function Home() {
-  // const profile = useQuery(api.profiles.get);
   const isVisible = useScrollDirection();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white" style={{}}>
+    <div className="flex flex-col">
       <header
         className={`header sticky top-0 z-10 bg-white border-b p-4 flex justify-between items-center ${!isVisible ? "header-hidden" : ""}`}
       >

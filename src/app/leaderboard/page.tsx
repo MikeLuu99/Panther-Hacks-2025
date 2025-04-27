@@ -10,7 +10,7 @@ export default function LeaderboardPage() {
   const isVisible = useScrollDirection();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="flex flex-col">
       <header
         className={`header sticky top-0 z-10 bg-white border-b p-4 flex justify-between items-center ${!isVisible ? "header-hidden" : ""}`}
       >
@@ -40,7 +40,7 @@ export default function LeaderboardPage() {
         <div className="w-[60px]" /> {/* Spacer for balanced layout */}
       </header>
 
-      <main className="flex-1 p-8 bg-white">
+      <main className="flex-1 p-8">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-lg shadow">
             <div className="p-6">

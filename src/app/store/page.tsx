@@ -9,24 +9,8 @@ import Link from "next/link";
 export default function StorePage() {
   const profile = useQuery(api.profiles.get);
 
-  // Check if profile exists and if it has selectedBackground property
-  const backgroundStyle =
-    profile &&
-    "selectedBackground" in profile &&
-    typeof profile.selectedBackground === "string"
-      ? {
-          backgroundImage: `url(${profile.selectedBackground})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }
-      : {};
-
   return (
-    <div
-      className="min-h-screen flex flex-col bg-white"
-      style={backgroundStyle}
-    >
+    <div className="flex flex-col">
       <header className="sticky top-0 z-10 bg-white border-b p-4 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2">
           <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
