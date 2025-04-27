@@ -17,7 +17,6 @@ import {
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 
-// Debounce helper function
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
@@ -36,7 +35,7 @@ function useDebounce<T>(value: T, delay: number): T {
 
 export function ChallengesList() {
   const [searchInput, setSearchInput] = useState("");
-  const debouncedSearchQuery = useDebounce(searchInput, 300); // 300ms delay
+  const debouncedSearchQuery = useDebounce(searchInput, 300);
 
   const challenges = useQuery(
     debouncedSearchQuery ? api.challenges.search : api.challenges.list,
@@ -192,6 +191,10 @@ function Challenge({ challenge }: { challenge: Challenge }) {
     setShowUploader(taskId);
   };
 
+  const handleCancelComplete = () => {
+    setShowUploader(null);
+  };
+
   if (!tasks) return null;
 
   return (
@@ -319,7 +322,18 @@ function Challenge({ challenge }: { challenge: Challenge }) {
 
                           {showUploader === typedTask._id &&
                             typedTask.status === "pending" && (
-                              <ImageUploader taskId={typedTask._id} />
+                              <div className="w-full">
+                                <div className="mt-4 flex justify-end">
+                                  <Button
+                                    onClick={handleCancelComplete}
+                                    className="text-sm bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-500 hover:text-white"
+                                    shadow="red"
+                                  >
+                                    Cancel
+                                  </Button>
+                                </div>
+                                <ImageUploader taskId={typedTask._id} />
+                              </div>
                             )}
 
                           {typedTask.status === "completed" &&

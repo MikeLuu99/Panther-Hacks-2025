@@ -85,33 +85,33 @@ export function PromptInput() {
           bg="#fefcd0"
           textColor="black"
           borderColor="black"
-          placeholder="Enter your text here..."
+          placeholder="Enter any health concerns that you have"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
         {isLoading ? (
-          <div>
+          <div className="w-4/5">
             <Button
               onClick={handleSubmit}
               disabled={true}
-              className="self-center flex flex-col items-center animate-bounce"
+              className="self-center flex flex-col items-center animate-bounce w-full"
             >
               <Image
-                src={`/doctor${Math.floor(Date.now() / 200) % 2 === 0 ? "Thinking1" : "Thinking2"}.svg`}
+                src={"/doctorThinking2.svg"}
                 alt="Generating"
                 width={80}
                 height={80}
                 className="animate-pulse"
               />
-              Generating...
+              Thinking...
             </Button>
           </div>
         ) : (
-          <div>
+          <div className="w-4/5">
             <Button
               onClick={handleSubmit}
               disabled={false}
-              className="self-center flex flex-col items-center"
+              className="self-center flex flex-col items-center w-full"
             >
               <Image
                 src="/doctorSleeping.svg"
@@ -119,7 +119,7 @@ export function PromptInput() {
                 width={80}
                 height={80}
               />
-              Generate Challenge
+              Ask Sandie!!
             </Button>
           </div>
         )}

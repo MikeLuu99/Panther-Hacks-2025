@@ -109,18 +109,21 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
   };
 
   return (
-    <div className="grid w-full max-w-sm items-center gap-4">
+    <div className="w-full max-w-sm flex flex-col items-center justify-center gap-4 mx-auto">
       {!showCamera ? (
         <>
-          <div>
-            <Card>
-              <Label htmlFor="picture">Upload completion picture</Label>
+          <div className="flex justify-center w-full">
+            <Card className="w-full text-center">
+              <Label htmlFor="picture" className="block text-center">
+                Upload completion picture
+              </Label>
               <Input
                 id="picture"
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
                 disabled={isUploading}
+                className="mx-auto"
               />
             </Card>
           </div>
@@ -135,8 +138,8 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
           </div>
         </>
       ) : (
-        <div className="space-y-4">
-          <div className="relative h-[300px] w-full">
+        <div className="space-y-4 w-full flex flex-col items-center">
+          <div className="relative h-[300px] w-full flex justify-center">
             <Camera ref={camera} aspectRatio={16 / 9} errorMessages={{}} />
           </div>
           <div className="flex justify-center gap-2">
@@ -165,8 +168,7 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
           />
         </div>
       )}{" "}
-      height={200}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center gap-2 w-full">
         {file && !isImageSaved && (
           <Button
             onClick={handleUpload}
