@@ -36,6 +36,7 @@ export default function Home() {
             href="/leaderboard"
             className="text-indigo-600 hover:text-indigo-700 font-medium"
           >
+            <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
             <Image
               src="/leaderboard.svg"
               alt="Leaderboard"
@@ -43,6 +44,7 @@ export default function Home() {
               height={50}
               priority
             />
+            </div>
           </Link>
         </div>
       </header>

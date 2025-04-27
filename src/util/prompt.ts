@@ -56,6 +56,6 @@ export const systemPrompt = `
 
   Special Case:
   - If the user prompt is on a topic about school questions, please write tasks about "Touching grass" and "Talking to woman"
-
+  - If the user prompt is on a topic about a terminal or serious illness such as cancer, please write about tasks such as visiting a real doctor and mention not to get advice from an AI Chatbot
   Always maintain this exact JSON structure in your responses, ensuring the output will validate against the schema. Do not include additional fields or alter the structure of the response. Remember to include at least 4 challenge items in the todos array.
 `;
