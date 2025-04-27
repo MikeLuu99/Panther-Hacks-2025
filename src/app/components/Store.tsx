@@ -4,23 +4,47 @@ import { toast } from "sonner";
 import { Card, Button } from "pixel-retroui";
 import Image from "next/image";
 
+// Define proper interfaces for the data structures
+interface Profile {
+  score: number;
+  purchasedBackgrounds?: string[];
+  selectedBackground?: string;
+}
+
+interface StoreItem {
+  _id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  price: number;
+}
+
 export function Store() {
-  const items = useQuery(api.store.listItems);
+  const items = useQuery(api.store.listItems) as StoreItem[] | undefined;
   const purchaseBackground = useMutation(api.store.purchaseBackground);
-  const profile = useQuery(api.profiles.get);
+  const profile = useQuery(api.profiles.get) as Profile | undefined;
 
   if (!items || !profile) return null;
+
+  // Add type guard for profile.score
+  const score = profile.score ?? 0;
 
   const handlePurchase = async (imageUrl: string | null) => {
     try {
       await purchaseBackground({ imageUrl });
-      toast.success(imageUrl === null 
-        ? "Switched to default background" 
-        : profile.purchasedBackgrounds?.includes(imageUrl)
-          ? "Background selected!"
-          : "Background purchased successfully!");
+      toast.success(
+        imageUrl === null
+          ? "Switched to default background"
+          : profile.purchasedBackgrounds?.includes(imageUrl)
+            ? "Background selected!"
+            : "Background purchased successfully!",
+      );
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to purchase background");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to purchase background",
+      );
     }
   };
 
@@ -34,17 +58,25 @@ export function Store() {
             <div className="relative w-full h-40 bg-white border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
               <span className="text-gray-500">Plain White</span>
             </div>
-            <p className="text-sm text-gray-600">Switch back to the default white background</p>
+            <p className="text-sm text-gray-600">
+              Switch back to the default white background
+            </p>
             <Button
               onClick={() => handlePurchase(null)}
-              className={profile.selectedBackground === undefined ? "bg-green-500 text-white" : "bg-blue-500 text-white"}
+              className={
+                profile.selectedBackground === undefined
+                  ? "bg-green-500 text-white"
+                  : "bg-blue-500 text-white"
+              }
             >
               {profile.selectedBackground === undefined ? "Selected" : "Select"}
             </Button>
           </div>
         </Card>
         {items.map((item) => {
-          const isPurchased = profile.purchasedBackgrounds?.includes(item.imageUrl);
+          const isPurchased = profile.purchasedBackgrounds?.includes(
+            item.imageUrl,
+          );
           const isSelected = profile.selectedBackground === item.imageUrl;
 
           return (
@@ -75,24 +107,24 @@ export function Store() {
                 )}
                 <Button
                   onClick={() => handlePurchase(item.imageUrl)}
-                  disabled={!isPurchased && profile.score < item.price}
+                  disabled={!isPurchased && score < item.price}
                   className={
                     isSelected
                       ? "bg-green-500 text-white"
                       : isPurchased
-                      ? "bg-blue-500 text-white"
-                      : profile.score >= item.price
-                      ? "bg-indigo-500 text-white"
-                      : "bg-gray-300"
+                        ? "bg-blue-500 text-white"
+                        : score >= item.price
+                          ? "bg-indigo-500 text-white"
+                          : "bg-gray-300"
                   }
                 >
                   {isSelected
                     ? "Selected"
                     : isPurchased
-                    ? "Select"
-                    : profile.score >= item.price
-                    ? "Purchase"
-                    : "Not enough apples"}
+                      ? "Select"
+                      : score >= item.price
+                        ? "Purchase"
+                        : "Not enough apples"}
                 </Button>
               </div>
             </Card>

@@ -1,12 +1,14 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { GenericQueryCtx, GenericMutationCtx } from "convex/server";
+import type { GenericQueryCtx, GenericMutationCtx } from "convex/server";
 import { Doc, Id } from "./_generated/dataModel";
 
 // Make the query public
 export const listItems = query({
   args: {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   handler: async (ctx: GenericQueryCtx<any>) => {
     return await ctx.db.query("storeItems").collect();
   },
@@ -18,8 +20,10 @@ export const purchaseBackground = mutation({
     imageUrl: v.union(v.string(), v.null()),
   },
   handler: async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     ctx: GenericMutationCtx<any>,
-    args: { imageUrl: string | null }
+    args: { imageUrl: string | null },
   ) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
@@ -40,7 +44,9 @@ export const purchaseBackground = mutation({
     }
 
     if (profile.score === undefined || profile.score < 5) {
-      throw new Error("Not enough apples! You need 5 apples to purchase a background.");
+      throw new Error(
+        "Not enough apples! You need 5 apples to purchase a background.",
+      );
     }
 
     // Get current purchased backgrounds or initialize empty array
@@ -68,6 +74,8 @@ export const purchaseBackground = mutation({
 // Initialize store items
 export const initializeStore = mutation({
   args: {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   handler: async (ctx: GenericMutationCtx<any>) => {
     const items = [
       {
