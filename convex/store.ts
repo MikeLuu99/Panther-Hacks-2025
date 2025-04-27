@@ -79,52 +79,24 @@ export const initializeStore = mutation({
   handler: async (ctx: GenericMutationCtx<any>) => {
     const items = [
       {
-        name: "Panther Hacks Background",
-        description: "Show your Panther pride!",
+        name: "Chapman Background",
+        description: "Show your Chapman pride!",
         price: 5,
-        imageUrl: "/pantherHacksBG.png",
+        imageUrl: "/chapmanBG.png",
         type: "background",
       },
       {
-        name: "LeBron Background",
-        description: "The King's Court",
+        name: "Hospital Background",
+        description: "Medical vibes!",
         price: 5,
-        imageUrl: "/lebronBG.png",
+        imageUrl: "/hospitalBG.png",
         type: "background",
       },
       {
-        name: "Cherry Blossom Background",
-        description: "Beautiful spring vibes!",
+        name: "Kyle Kuzma Background",
+        description: "NBA Star Power!",
         price: 5,
-        imageUrl: "/cherryBlossomBG.png",
-        type: "background",
-      },
-      {
-        name: "Eiffel Tower Background",
-        description: "Parisian elegance",
-        price: 5,
-        imageUrl: "/eiffelBG.png",
-        type: "background",
-      },
-      {
-        name: "Panther Background",
-        description: "Fierce and proud!",
-        price: 5,
-        imageUrl: "/pantherBG.png",
-        type: "background",
-      },
-      {
-        name: "Sandhu Background",
-        description: "Academic excellence",
-        price: 5,
-        imageUrl: "/sandhuBG.png",
-        type: "background",
-      },
-      {
-        name: "Waterfall Background",
-        description: "Serene nature views",
-        price: 5,
-        imageUrl: "/waterfallBG.png",
+        imageUrl: "/kuzBG.png",
         type: "background",
       }
     ];
