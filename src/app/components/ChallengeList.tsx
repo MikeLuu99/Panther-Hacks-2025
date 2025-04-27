@@ -219,15 +219,17 @@ function Challenge({ challenge }: { challenge: Challenge }) {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h4 className="font-semibold">Tasks</h4>
+              <div className="text-sm bg-slate-000 px-3 py-1 rounded hover:bg-slate-300 transition-colors duration-200">
               <Card>
+              
                 <button
                   type="button"
                   onClick={() => setShowTaskForm(!showTaskForm)}
-                  className="text-sm bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
                 >
                   {showTaskForm ? "Cancel" : "Add Task"}
                 </button>
               </Card>
+              </div>
             </div>
 
             {showTaskForm && (
