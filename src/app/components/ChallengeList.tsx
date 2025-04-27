@@ -67,10 +67,10 @@ export function ChallengesList() {
   if (!challenges) return null;
 
   const activeChallenges = challenges.filter(
-    (challenge) => challenge.status === "active"
+    (challenge) => challenge.status === "active",
   );
   const completedChallenges = challenges.filter(
-    (challenge) => challenge.status === "completed"
+    (challenge) => challenge.status === "completed",
   );
 
   return (
@@ -108,7 +108,10 @@ export function ChallengesList() {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="space-y-4 p-4 rounded bg-white">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 p-4 rounded bg-white"
+        >
           <Card>
             <div>
               <input
@@ -164,14 +167,16 @@ export function ChallengesList() {
               {showCompleted ? "Hide" : "Show"}
             </Button>
           </div>
-          
+
           {showCompleted && (
             <div className="space-y-8">
               {completedChallenges.map((challenge) => (
                 <Challenge key={challenge._id} challenge={challenge} />
               ))}
               {completedChallenges.length === 0 && (
-                <p className="text-gray-500 text-center">No completed challenges</p>
+                <p className="text-gray-500 text-center">
+                  No completed challenges
+                </p>
               )}
             </div>
           )}
