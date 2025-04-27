@@ -11,7 +11,7 @@ export function SignInForm() {
       <Bubble direction="left" className="w-1/2">
         Ask me about any health concerns and I will give you a list of
         challenges to complete! Compete with other patients and earn apples. You
-        can also steal other&apos;s tasks!
+        can also steal other&apos;s tasks! Make sure to have a photo as proof.
       </Bubble>
       <Image
         src="/doctorTalk2.svg"

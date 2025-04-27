@@ -9,48 +9,64 @@ import { PromptInput } from "@/app/components/PromptInput";
 import Image from "next/image";
 import Link from "next/link";
 import { useScrollDirection } from "./hooks/useScrollDirection";
-// import { Card } from "pixel-retroui";
+// import { Store } from "@/app/components/Store";
 
 export default function Home() {
+  // const profile = useQuery(api.profiles.get);
   const isVisible = useScrollDirection();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white" style={{}}>
       <header
         className={`header sticky top-0 z-10 bg-white border-b p-4 flex justify-between items-center ${!isVisible ? "header-hidden" : ""}`}
       >
         <div className="flex items-center gap-2">
-        <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
-          <Image
-            src="/doctor.svg"
-            alt="Website Logo"
-            width={60}
-            height={60}
-            priority
-          />
+          <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
+            <Image
+              src="/doctor.svg"
+              alt="Website Logo"
+              width={60}
+              height={60}
+              priority
+            />
           </div>
         </div>
         <div className="flex items-center gap-4">
           <UserScore />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/store"
+            className="text-indigo-600 hover:text-indigo-700 font-medium"
+          >
+            <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300 flex items-center gap-2">
+              <Image
+                src="/apple.svg"
+                alt="Store"
+                width={30}
+                height={30}
+                priority
+              />
+              <span>Store</span>
+            </div>
+          </Link>
           <Link
             href="/leaderboard"
             className="text-indigo-600 hover:text-indigo-700 font-medium"
           >
             <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
-            <Image
-              src="/leaderboard.svg"
-              alt="Leaderboard"
-              width={50}
-              height={50}
-              priority
-            />
+              <Image
+                src="/leaderboard.svg"
+                alt="Leaderboard"
+                width={50}
+                height={50}
+                priority
+              />
             </div>
           </Link>
         </div>
       </header>
-      <main className="flex-1 p-8 bg-white">
+      <main className="flex-1 p-8">
         <div className="max-w-4xl mx-auto">
           <Content />
         </div>

@@ -18,6 +18,7 @@ import type * as challenges from "../challenges.js";
 import type * as http from "../http.js";
 import type * as images from "../images.js";
 import type * as profiles from "../profiles.js";
+import type * as store from "../store.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   images: typeof images;
   profiles: typeof profiles;
+  store: typeof store;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

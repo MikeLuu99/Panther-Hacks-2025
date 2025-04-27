@@ -6,10 +6,20 @@ const applicationTables = {
   profiles: defineTable({
     userId: v.id("users"),
     nickname: v.string(),
-    score: v.optional(v.number()),
+    score: v.optional(v.float64()),
+    selectedBackground: v.optional(v.string()),
+    purchasedBackgrounds: v.optional(v.array(v.string())),
   })
     .index("by_user", ["userId"])
     .index("by_score", ["score"]),
+
+  storeItems: defineTable({
+    name: v.string(),
+    description: v.string(),
+    price: v.float64(),
+    imageUrl: v.string(),
+    type: v.string(),
+  }),
 
   challenges: defineTable({
     title: v.string(),
