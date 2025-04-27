@@ -30,7 +30,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-64">
           <UserScore />
         </div>
         <div className="flex items-center gap-4">
@@ -82,22 +82,20 @@ function UserScore() {
   if (!profile) return null;
 
   return (
-    <Card>
-      <div className="text-xl font-medium flex items-center gap-2 p-2">
-        Score:{" "}
-        <span className="text-indigo-600 flex items-center gap-1">
-          {profile.score || 0}{" "}
-          <Image
-            src="/apple.svg"
-            alt="apple score"
-            width={20}
-            height={20}
-            className="inline-block"
-            priority
-          />
-        </span>
-      </div>
-    </Card>
+    <div className="text-xl font-medium flex items-center gap-2 p-2">
+      Score:{" "}
+      <span className="text-indigo-600 flex items-center gap-1">
+        {profile.score || 0}{" "}
+        <Image
+          src="/apple.svg"
+          alt="apple score"
+          width={20}
+          height={20}
+          className="inline-block"
+          priority
+        />
+      </span>
+    </div>
   );
 }
 
