@@ -36,11 +36,12 @@ function useDebounce<T>(value: T, delay: number): T {
 export function ChallengesList() {
   const [searchInput, setSearchInput] = useState("");
   const [showCompleted, setShowCompleted] = useState(false);
-  const debouncedSearchQuery = useDebounce(searchInput, 300);
+  const [activeSearch, setActiveSearch] = useState("");
+  const debouncedSearchQuery = useDebounce(activeSearch, 300);
 
   const searchResults = useQuery(
     api.challenges.search,
-    debouncedSearchQuery ? { query: debouncedSearchQuery } : "skip",
+    debouncedSearchQuery ? { query: debouncedSearchQuery } : "skip"
   );
 
   const allChallenges = useQuery(api.challenges.list);
@@ -62,6 +63,13 @@ export function ChallengesList() {
     } catch {
       toast.error("Failed to create challenge");
     }
+  };
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+    setActiveSearch(searchInput);
   };
 
   if (!challenges) return null;
@@ -88,27 +96,35 @@ export function ChallengesList() {
             </button>
           </Card>
         </div>
-        <div className="flex items-center mb-12">
+        <form onSubmit={handleSearch} className="flex items-center mb-12">
           <Card className="w-full">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <Image
                 src="/magnifyingGlass.svg"
                 alt="Magnifying Glass"
                 width={60}
                 height={60}
               />
-              <Input
-                placeholder="Search challenges..."
-                className="w-full"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                bg="#fefcd0"
-                textColor="black"
-                borderColor="black"
-              />
+              <div className="flex-1 flex gap-2">
+                <Input
+                  placeholder="Search challenges..."
+                  className="w-full"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  bg="#fefcd0"
+                  textColor="black"
+                  borderColor="black"
+                />
+                <Button
+                  type="submit"
+                  className="bg-indigo-500 text-white rounded px-4 py-2 hover:bg-indigo-600"
+                >
+                  Search
+                </Button>
+              </div>
             </div>
           </Card>
-        </div>
+        </form>
       </div>
 
       {showForm && (
