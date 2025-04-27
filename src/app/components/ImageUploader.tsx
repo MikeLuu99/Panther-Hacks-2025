@@ -7,8 +7,15 @@ import { toast } from "sonner";
 import { Button, Card } from "pixel-retroui";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { Camera } from "react-camera-pro";
+import Image from "next/image";
 
-export function ImageUploader({ taskId, onComplete }: { taskId: Id<"tasks">, onComplete?: () => void }) {
+export function ImageUploader({
+  taskId,
+  onComplete,
+}: {
+  taskId: Id<"tasks">;
+  onComplete?: () => void;
+}) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -102,7 +109,7 @@ export function ImageUploader({ taskId, onComplete }: { taskId: Id<"tasks">, onC
       setFile(null);
       setPreview(null);
       setIsImageSaved(false);
-      
+
       onComplete?.();
     } catch (error) {
       console.error("Task completion failed:", error);
@@ -160,15 +167,27 @@ export function ImageUploader({ taskId, onComplete }: { taskId: Id<"tasks">, onC
           </div>
         </div>
       )}
-      {preview && (
-        <div className="mt-4 flex justify-center">
-          <img
-            src={preview}
-            alt="Preview"
-            className="max-w-full h-auto rounded-lg"
-            style={{ maxHeight: "200px" }}
+      {isUploading ? (
+        <div className="animate-bounce">
+          <Image
+            src="/doctorRunning.svg"
+            alt="Uploading..."
+            className="w-24 h-24"
+            width={80}
+            height={80}
           />
         </div>
+      ) : (
+        preview && (
+          <div className="mt-4 flex justify-center">
+            <img
+              src={preview}
+              alt="Preview"
+              className="max-w-full h-auto rounded-lg"
+              style={{ maxHeight: "200px" }}
+            />
+          </div>
+        )
       )}{" "}
       <div className="flex flex-col items-center gap-2 w-full">
         {file && !isImageSaved && (
