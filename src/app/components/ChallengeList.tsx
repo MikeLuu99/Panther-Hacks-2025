@@ -150,7 +150,7 @@ export function ChallengesList() {
         </form>
       )}
 
-      <div className="grid gap-32">
+      <div className="grid">
         <div>
           <h3 className="text-xl font-semibold mb-4">Active Challenges</h3>
           {activeChallenges.map((challenge) => (
@@ -245,7 +245,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   if (!tasks) return null;
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div className="relative flex flex-col items-center my-32 w-full">
       <div className="absolute -top-28 z-10">
         <Image src="/clip.svg" alt="Clip" width={300} height={300} />
       </div>
