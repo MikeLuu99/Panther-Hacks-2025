@@ -16,6 +16,7 @@ export default function LeaderboardPage() {
       >
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
+          <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
             <Image
               src="/doctor.svg"
               alt="Website Logo"
@@ -23,6 +24,7 @@ export default function LeaderboardPage() {
               height={60}
               priority
             />
+            </div>
           </Link>
         </div>
         <div className="flex items-center gap-2">

@@ -20,6 +20,7 @@ export default function Home() {
         className={`header sticky top-0 z-10 bg-white border-b p-4 flex justify-between items-center ${!isVisible ? "header-hidden" : ""}`}
       >
         <div className="flex items-center gap-2">
+        <div className="hover:bg-[#D3D3D3] rounded transform transition duration-300">
           <Image
             src="/doctor.svg"
             alt="Website Logo"
@@ -27,6 +28,7 @@ export default function Home() {
             height={60}
             priority
           />
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <UserScore />
