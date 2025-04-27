@@ -73,8 +73,8 @@ export const getTopUsers = query({
   handler: async (ctx) => {
     const profiles = await ctx.db
       .query("profiles")
-      .filter((q) => q.neq(q.field("score"), undefined))
-      .order("asc")
+      .withIndex("by_score")
+      .order("desc")
       .take(10);
 
     return profiles;

@@ -7,7 +7,9 @@ const applicationTables = {
     userId: v.id("users"),
     nickname: v.string(),
     score: v.optional(v.number()),
-  }).index("by_user", ["userId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_score", ["score"]),
 
   challenges: defineTable({
     title: v.string(),
