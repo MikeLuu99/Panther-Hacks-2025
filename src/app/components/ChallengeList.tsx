@@ -41,7 +41,7 @@ export function ChallengesList() {
 
   const searchResults = useQuery(
     api.challenges.search,
-    debouncedSearchQuery ? { query: debouncedSearchQuery } : "skip"
+    debouncedSearchQuery ? { query: debouncedSearchQuery } : "skip",
   );
 
   const allChallenges = useQuery(api.challenges.list);
@@ -167,7 +167,7 @@ export function ChallengesList() {
       )}
 
       <div className="grid">
-        <div>
+        <div className="w-[800px] mx-auto">
           <h3 className="text-xl font-semibold mb-4">Active Challenges</h3>
           {activeChallenges.map((challenge) => (
             <Challenge key={challenge._id} challenge={challenge} />
@@ -177,7 +177,7 @@ export function ChallengesList() {
           )}
         </div>
 
-        <div>
+        <div className="w-[800px] mx-auto">
           <div className="flex items-center gap-4 mb-4">
             <h3 className="text-xl font-semibold">Completed Challenges</h3>
             <Button
@@ -261,12 +261,12 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   if (!tasks) return null;
 
   return (
-    <div className="relative flex flex-col items-center my-32 w-full">
+    <div className="relative flex flex-col items-center my-32 w-[800px] mx-auto">
       <div className="absolute -top-28 z-10">
         <Image src="/clip.svg" alt="Clip" width={300} height={300} />
       </div>
 
-      <Card borderColor="#697786">
+      <Card borderColor="#697786" className="w-full">
         <div className="relative z-1 p-4 space-y-4">
           <div className="text-center flex flex-col items-center">
             <Image

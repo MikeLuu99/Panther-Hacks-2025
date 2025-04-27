@@ -79,9 +79,9 @@ export function PromptInput() {
   };
 
   return (
-    <Card>
-      <div className="space-y-4 m-4">
-        <div className="flex flex-col gap-8 items-center">
+    <div className="space-y-4">
+      <Card>
+        <div className="flex flex-col gap-8 items-center m-4">
           <TextArea
             bg="#fefcd0"
             textColor="black"
@@ -126,46 +126,41 @@ export function PromptInput() {
             </div>
           )}
         </div>
+      </Card>
 
-        {aiResponse && (
-          <div>
-            <Bubble direction="right">
-              <div className="mt-4 p-4 rounded-lg bg-white">
-                <h3 className="text-xl font-bold mb-2">{aiResponse.title}</h3>
-                <p className="mb-4 text-gray-600">{aiResponse.description}</p>
+      {aiResponse && (
+        <div>
+          <Bubble direction="right">
+            <div className="mt-4 p-4 rounded-lg bg-white">
+              <h3 className="text-xl font-bold mb-2">{aiResponse.title}</h3>
+              <p className="mb-4 text-gray-600">{aiResponse.description}</p>
 
-                <h4 className="font-semibold mb-2">Tasks:</h4>
-                <ul className="list-disc pl-5 mb-4">
-                  {aiResponse.tasks.map((task) => (
-                    <li
-                      key={`${task.task}-${task.description}`}
-                      className="mb-2"
-                    >
-                      <p className="font-medium">{task.task}</p>
-                      <p className="text-sm text-gray-600">
-                        {task.description}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
+              <h4 className="font-semibold mb-2">Tasks:</h4>
+              <ul className="list-disc pl-5 mb-4">
+                {aiResponse.tasks.map((task) => (
+                  <li key={`${task.task}-${task.description}`} className="mb-2">
+                    <p className="font-medium">{task.task}</p>
+                    <p className="text-sm text-gray-600">{task.description}</p>
+                  </li>
+                ))}
+              </ul>
 
-                <Button onClick={handleCreateChallenge} disabled={isCreating}>
-                  {isCreating ? "Creating..." : "Take on this challenge"}
-                </Button>
-              </div>
-            </Bubble>
-            <div className="flex justify-end">
-              <Image
-                src="/doctorTalk.svg"
-                alt="Doctor Talking"
-                width={200}
-                height={200}
-                className="-mr-20"
-              />
+              <Button onClick={handleCreateChallenge} disabled={isCreating}>
+                {isCreating ? "Creating..." : "Take on this challenge"}
+              </Button>
             </div>
+          </Bubble>
+          <div className="flex justify-end">
+            <Image
+              src="/doctorTalk.svg"
+              alt="Doctor Talking"
+              width={200}
+              height={200}
+              className="-mr-20"
+            />
           </div>
-        )}
-      </div>
-    </Card>
+        </div>
+      )}
+    </div>
   );
 }
