@@ -35,17 +35,15 @@ function useDebounce<T>(value: T, delay: number): T {
 
 export function ChallengesList() {
   const [searchInput, setSearchInput] = useState("");
+  const [showCompleted, setShowCompleted] = useState(false);
   const debouncedSearchQuery = useDebounce(searchInput, 300);
 
-  // Fix: Separate the query calls instead of using conditional arguments
   const searchResults = useQuery(
     api.challenges.search,
     debouncedSearchQuery ? { query: debouncedSearchQuery } : "skip",
   );
 
   const allChallenges = useQuery(api.challenges.list);
-
-  // Use the appropriate result based on whether we're searching or not
   const challenges = debouncedSearchQuery ? searchResults : allChallenges;
 
   const createChallenge = useMutation(api.challenges.create);
@@ -68,6 +66,13 @@ export function ChallengesList() {
 
   if (!challenges) return null;
 
+  const activeChallenges = challenges.filter(
+    (challenge) => challenge.status === "active"
+  );
+  const completedChallenges = challenges.filter(
+    (challenge) => challenge.status === "completed"
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4">
@@ -79,7 +84,7 @@ export function ChallengesList() {
               onClick={() => setShowForm(!showForm)}
               className="bg-indigo-500 text-white rounded px-4 py-2 hover:bg-indigo-600"
             >
-              {showForm ? "Cancel" : "New Challenge"}
+              {showForm ? "Cancel" : "Create your own challenge"}
             </button>
           </Card>
         </div>
@@ -103,10 +108,7 @@ export function ChallengesList() {
       </div>
 
       {showForm && (
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4 p-4 rounded bg-white"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4 p-4 rounded bg-white">
           <Card>
             <div>
               <input
@@ -125,7 +127,7 @@ export function ChallengesList() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Challenge description"
-                className="w-full  rounded p-2"
+                className="w-full rounded p-2"
                 required
               />
             </div>
@@ -142,9 +144,38 @@ export function ChallengesList() {
       )}
 
       <div className="grid gap-32">
-        {challenges.map((challenge) => (
-          <Challenge key={challenge._id} challenge={challenge} />
-        ))}
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Active Challenges</h3>
+          {activeChallenges.map((challenge) => (
+            <Challenge key={challenge._id} challenge={challenge} />
+          ))}
+          {activeChallenges.length === 0 && (
+            <p className="text-gray-500 text-center">No active challenges</p>
+          )}
+        </div>
+
+        <div>
+          <div className="flex items-center gap-4 mb-4">
+            <h3 className="text-xl font-semibold">Completed Challenges</h3>
+            <Button
+              onClick={() => setShowCompleted(!showCompleted)}
+              className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300"
+            >
+              {showCompleted ? "Hide" : "Show"}
+            </Button>
+          </div>
+          
+          {showCompleted && (
+            <div className="space-y-8">
+              {completedChallenges.map((challenge) => (
+                <Challenge key={challenge._id} challenge={challenge} />
+              ))}
+              {completedChallenges.length === 0 && (
+                <p className="text-gray-500 text-center">No completed challenges</p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -226,18 +257,20 @@ function Challenge({ challenge }: { challenge: Challenge }) {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h4 className="font-semibold">Tasks</h4>
-              <Card>
-                <button
-                  type="button"
-                  onClick={() => setShowTaskForm(!showTaskForm)}
-                  className="text-sm bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
-                >
-                  {showTaskForm ? "Cancel" : "Add Task"}
-                </button>
-              </Card>
+              {challenge.status === "active" && (
+                <Card>
+                  <button
+                    type="button"
+                    onClick={() => setShowTaskForm(!showTaskForm)}
+                    className="text-sm bg-slate-100 px-3 py-1 rounded hover:bg-slate-200"
+                  >
+                    {showTaskForm ? "Cancel" : "Add Task"}
+                  </button>
+                </Card>
+              )}
             </div>
 
-            {showTaskForm && (
+            {showTaskForm && challenge.status === "active" && (
               <form onSubmit={handleSubmit} className="space-y-4 mb-4">
                 <Card>
                   <input
@@ -245,7 +278,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
                     placeholder="Task title"
-                    className="w-full  rounded p-2"
+                    className="w-full rounded p-2"
                     required
                   />
                 </Card>
@@ -254,7 +287,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                     value={taskDescription}
                     onChange={(e) => setTaskDescription(e.target.value)}
                     placeholder="Task description"
-                    className="w-full  rounded p-2"
+                    className="w-full rounded p-2"
                     required
                   />
                 </Card>

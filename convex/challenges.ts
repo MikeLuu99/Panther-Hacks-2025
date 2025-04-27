@@ -50,7 +50,6 @@ export const getTasks = query({
       .withIndex("by_challenge", (q) => q.eq("challengeId", args.challengeId))
       .collect();
 
-    // Get completion info for each task
     const tasksWithCompletion = await Promise.all(
       tasks.map(async (task) => {
         const completion = await ctx.db
@@ -59,13 +58,11 @@ export const getTasks = query({
           .first();
 
         if (completion) {
-          // Get the user's profile to get their nickname
           const profile = await ctx.db
             .query("profiles")
             .withIndex("by_user", (q) => q.eq("userId", completion.userId))
             .unique();
 
-          // Get the image if it exists
           const image = await ctx.db
             .query("images")
             .filter((q) => q.eq(q.field("taskId"), task._id))
@@ -122,6 +119,9 @@ export const completeTask = mutation({
 
     if (existing) throw new Error("Task already completed");
 
+    const task = await ctx.db.get(args.taskId);
+    if (!task) throw new Error("Task not found");
+
     await ctx.db.insert("taskCompletions", {
       taskId: args.taskId,
       userId,
@@ -132,7 +132,19 @@ export const completeTask = mutation({
       status: "completed",
     });
 
-    // Increment the user's score
+    const allTasks = await ctx.db
+      .query("tasks")
+      .withIndex("by_challenge", (q) => q.eq("challengeId", task.challengeId))
+      .collect();
+
+    const allCompleted = allTasks.every((t) => t.status === "completed");
+
+    if (allCompleted) {
+      await ctx.db.patch(task.challengeId, {
+        status: "completed",
+      });
+    }
+
     const profile = await ctx.db
       .query("profiles")
       .withIndex("by_user", (q) => q.eq("userId", userId))
