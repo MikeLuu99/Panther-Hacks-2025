@@ -8,7 +8,7 @@ import { Button, Card } from "pixel-retroui";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { Camera } from "react-camera-pro";
 
-export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
+export function ImageUploader({ taskId, onComplete }: { taskId: Id<"tasks">, onComplete?: () => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -102,6 +102,8 @@ export function ImageUploader({ taskId }: { taskId: Id<"tasks"> }) {
       setFile(null);
       setPreview(null);
       setIsImageSaved(false);
+      
+      onComplete?.();
     } catch (error) {
       console.error("Task completion failed:", error);
       toast.error("Failed to complete task");

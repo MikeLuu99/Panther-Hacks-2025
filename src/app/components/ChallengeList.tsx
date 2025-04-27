@@ -231,7 +231,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [showUploader, setShowUploader] = useState<Id<"tasks"> | null>(null);
+  const [uploadingTasks, setUploadingTasks] = useState<Set<Id<"tasks">>>(new Set());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -251,11 +251,27 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   };
 
   const handleStartComplete = (taskId: Id<"tasks">) => {
-    setShowUploader(taskId);
+    setUploadingTasks(prev => {
+      const newSet = new Set(prev);
+      newSet.add(taskId);
+      return newSet;
+    });
   };
 
-  const handleCancelComplete = () => {
-    setShowUploader(null);
+  const handleCancelComplete = (taskId: Id<"tasks">) => {
+    setUploadingTasks(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(taskId);
+      return newSet;
+    });
+  };
+
+  const handleTaskCompleted = (taskId: Id<"tasks">) => {
+    setUploadingTasks(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(taskId);
+      return newSet;
+    });
   };
 
   if (!tasks) return null;
@@ -339,6 +355,8 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                   imageId: task.imageId,
                 };
 
+                const isUploading = uploadingTasks.has(typedTask._id);
+
                 return (
                   <AccordionItem key={typedTask._id} value={typedTask._id}>
                     <AccordionTrigger>
@@ -372,7 +390,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                               )}
                             </div>
                             {typedTask.status === "pending" &&
-                              !showUploader && (
+                              !isUploading && (
                                 <Button
                                   onClick={() =>
                                     handleStartComplete(typedTask._id)
@@ -385,19 +403,22 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                               )}
                           </div>
 
-                          {showUploader === typedTask._id &&
+                          {isUploading &&
                             typedTask.status === "pending" && (
                               <div className="w-full">
                                 <div className="mt-4 flex justify-end">
                                   <Button
-                                    onClick={handleCancelComplete}
+                                    onClick={() => handleCancelComplete(typedTask._id)}
                                     className="text-sm bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-500 hover:text-white"
                                     shadow="red"
                                   >
                                     Cancel
                                   </Button>
                                 </div>
-                                <ImageUploader taskId={typedTask._id} />
+                                <ImageUploader 
+                                  taskId={typedTask._id} 
+                                  onComplete={() => handleTaskCompleted(typedTask._id)}
+                                />
                               </div>
                             )}
 
