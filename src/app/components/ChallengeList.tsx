@@ -89,21 +89,25 @@ export function ChallengesList() {
           </Card>
         </div>
         <div className="flex items-center mb-12">
-          <Image
-            src="/magnifyingGlass.svg"
-            alt="Magnifying Glass"
-            width={60}
-            height={60}
-          />
-          <Input
-            placeholder="Search challenges..."
-            className="w-full"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            bg="#fefcd0"
-            textColor="black"
-            borderColor="black"
-          />
+          <Card className="w-full">
+            <div className="flex items-center">
+              <Image
+                src="/magnifyingGlass.svg"
+                alt="Magnifying Glass"
+                width={60}
+                height={60}
+              />
+              <Input
+                placeholder="Search challenges..."
+                className="w-full"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                bg="#fefcd0"
+                textColor="black"
+                borderColor="black"
+              />
+            </div>
+          </Card>
         </div>
       </div>
 
