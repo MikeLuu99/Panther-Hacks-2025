@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Doctor",
-  description: "A doctor that gives you health challenges",
+  title: "Doctor Sandie",
+  description: "Get health challenges and apples",
 };
 
 export default function RootLayout({

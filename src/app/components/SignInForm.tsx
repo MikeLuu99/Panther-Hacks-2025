@@ -10,8 +10,8 @@ export function SignInForm() {
     <div className="w-full">
       <Bubble direction="left" className="w-1/2">
         Ask me about any health concerns and I will give you a list of
-        challenges to complete! Compete with other patients and earn apples to
-        use in the shop!
+        challenges to complete! Compete with other patients and earn apples. You
+        can also steal other&apos;s tasks!
       </Bubble>
       <Image
         src="/doctorTalk2.svg"
