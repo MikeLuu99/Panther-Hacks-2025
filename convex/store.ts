@@ -20,8 +20,6 @@ export const purchaseBackground = mutation({
     imageUrl: v.union(v.string(), v.null()),
   },
   handler: async (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     ctx: GenericMutationCtx<any>,
     args: { imageUrl: string | null },
   ) => {
@@ -43,29 +41,31 @@ export const purchaseBackground = mutation({
       return { success: true };
     }
 
+    // Get current purchased backgrounds or initialize empty array
+    const purchasedBackgrounds = profile.purchasedBackgrounds || [];
+
+    // Check if already purchased first
+    if (purchasedBackgrounds.includes(args.imageUrl)) {
+      // If already purchased, just set it as selected without charging
+      await ctx.db.patch(profile._id, {
+        selectedBackground: args.imageUrl,
+      });
+      return { success: true };
+    }
+
+    // Only check apple count if we need to purchase
     if (profile.score === undefined || profile.score < 5) {
       throw new Error(
         "Not enough apples! You need 5 apples to purchase a background.",
       );
     }
 
-    // Get current purchased backgrounds or initialize empty array
-    const purchasedBackgrounds = profile.purchasedBackgrounds || [];
-
-    // Check if already purchased
-    if (purchasedBackgrounds.includes(args.imageUrl)) {
-      // If already purchased, just set it as selected without charging
-      await ctx.db.patch(profile._id, {
-        selectedBackground: args.imageUrl,
-      });
-    } else {
-      // Update profile with new background, deduct apples, and add to purchased list
-      await ctx.db.patch(profile._id, {
-        score: profile.score - 5,
-        selectedBackground: args.imageUrl,
-        purchasedBackgrounds: [...purchasedBackgrounds, args.imageUrl],
-      });
-    }
+    // Update profile with new background, deduct apples, and add to purchased list
+    await ctx.db.patch(profile._id, {
+      score: profile.score - 5,
+      selectedBackground: args.imageUrl,
+      purchasedBackgrounds: [...purchasedBackgrounds, args.imageUrl],
+    });
 
     return { success: true };
   },
