@@ -171,7 +171,9 @@ export function ChallengesList() {
       <div className="grid">
         <div className="w-[800px] mx-auto">
           <Card>
-            <h3 className="text-xl font-semibold mb-4 p-4">Active Challenges</h3>
+            <h3 className="text-xl font-semibold mb-4 p-4">
+              Active Challenges
+            </h3>
           </Card>
           {activeChallenges.map((challenge) => (
             <Challenge key={challenge._id} challenge={challenge} />
@@ -184,7 +186,9 @@ export function ChallengesList() {
         <div className="w-[800px] mx-auto">
           <div className="flex items-center gap-4 mb-4">
             <Card>
-              <h3 className="text-xl font-semibold p-4">Completed Challenges</h3>
+              <h3 className="text-xl font-semibold p-4">
+                Completed Challenges
+              </h3>
             </Card>
             <Button
               onClick={() => setShowCompleted(!showCompleted)}
@@ -237,7 +241,9 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [uploadingTasks, setUploadingTasks] = useState<Set<Id<"tasks">>>(new Set());
+  const [uploadingTasks, setUploadingTasks] = useState<Set<Id<"tasks">>>(
+    new Set(),
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -257,7 +263,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   };
 
   const handleStartComplete = (taskId: Id<"tasks">) => {
-    setUploadingTasks(prev => {
+    setUploadingTasks((prev) => {
       const newSet = new Set(prev);
       newSet.add(taskId);
       return newSet;
@@ -265,7 +271,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   };
 
   const handleCancelComplete = (taskId: Id<"tasks">) => {
-    setUploadingTasks(prev => {
+    setUploadingTasks((prev) => {
       const newSet = new Set(prev);
       newSet.delete(taskId);
       return newSet;
@@ -273,7 +279,7 @@ function Challenge({ challenge }: { challenge: Challenge }) {
   };
 
   const handleTaskCompleted = (taskId: Id<"tasks">) => {
-    setUploadingTasks(prev => {
+    setUploadingTasks((prev) => {
       const newSet = new Set(prev);
       newSet.delete(taskId);
       return newSet;
@@ -395,38 +401,48 @@ function Challenge({ challenge }: { challenge: Challenge }) {
                                 </div>
                               )}
                             </div>
-                            {typedTask.status === "pending" &&
-                              !isUploading && (
-                                <Button
-                                  onClick={() =>
-                                    handleStartComplete(typedTask._id)
-                                  }
-                                  className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-500 hover:text-white"
-                                  shadow="green"
-                                >
-                                  Complete?
-                                </Button>
-                              )}
+                            {typedTask.status === "pending" && !isUploading && (
+                              <Button
+                                onClick={() =>
+                                  handleStartComplete(typedTask._id)
+                                }
+                                className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-500 hover:text-white"
+                                shadow="green"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <Image
+                                    src="/apple.svg"
+                                    alt="Apple Icon"
+                                    width={24}
+                                    height={24}
+                                  />
+                                  <span>Complete?</span>
+                                </div>
+                              </Button>
+                            )}
                           </div>
 
-                          {isUploading &&
-                            typedTask.status === "pending" && (
-                              <div className="w-full">
-                                <div className="mt-4 flex justify-end">
-                                  <Button
-                                    onClick={() => handleCancelComplete(typedTask._id)}
-                                    className="text-sm bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-500 hover:text-white"
-                                    shadow="red"
-                                  >
-                                    Cancel
-                                  </Button>
-                                </div>
-                                <ImageUploader 
-                                  taskId={typedTask._id} 
-                                  onComplete={() => handleTaskCompleted(typedTask._id)}
-                                />
+                          {isUploading && typedTask.status === "pending" && (
+                            <div className="w-full">
+                              <div className="mt-4 flex justify-end">
+                                <Button
+                                  onClick={() =>
+                                    handleCancelComplete(typedTask._id)
+                                  }
+                                  className="text-sm bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-500 hover:text-white"
+                                  shadow="red"
+                                >
+                                  Cancel
+                                </Button>
                               </div>
-                            )}
+                              <ImageUploader
+                                taskId={typedTask._id}
+                                onComplete={() =>
+                                  handleTaskCompleted(typedTask._id)
+                                }
+                              />
+                            </div>
+                          )}
 
                           {typedTask.status === "completed" &&
                             typedTask.imageId && (
