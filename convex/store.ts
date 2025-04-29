@@ -2,7 +2,7 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import type { GenericQueryCtx, GenericMutationCtx } from "convex/server";
-import { Doc, Id } from "./_generated/dataModel";
+// import { Doc, Id } from "./_generated/dataModel";
 
 // Make the query public
 export const listItems = query({
@@ -98,7 +98,7 @@ export const initializeStore = mutation({
         price: 5,
         imageUrl: "/kuzBG.png",
         type: "background",
-      }
+      },
     ];
 
     // Check for existing items by imageUrl
